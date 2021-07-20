@@ -1,6 +1,9 @@
 {
   "name": "hiya-toolkit",
   "private": true,
+  "scripts": {
+    "pkg:publish": "lerna publish"
+  },
   "devDependencies": {
     "eslint": "^7.31.0",
     "lerna": "^3.20.2"
