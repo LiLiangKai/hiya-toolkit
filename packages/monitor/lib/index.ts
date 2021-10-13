@@ -2,7 +2,9 @@
 
 import initState from './state/init'
 import stateActions from './state'
-import replaceConsole from './core/console'
+// import replaceConsole from './core/console'
+import listenError from './core/listenError'
+import report from './core/report'
 import { IMonitorOption } from './types'
 
 function getDefaultOption () {
@@ -16,16 +18,19 @@ function getDefaultOption () {
  * 初始化
  * @param {IMonitorOption} option 
  */
-export default function initMonitor (option: IMonitorOption) {
+export default function initMonitor (option?: IMonitorOption) {
   option = Object.assign({}, getDefaultOption(), option)
   initState(option)
-  replaceConsole()
+  // replaceConsole()
+  listenError()
+  setTimeout(() => {
+    report()
+  }, 10)
   const hiya_monitor = {
     ...stateActions,
   }
   // @ts-ignore
   window.hiya_monitor = hiya_monitor
-  return hiya_monitor
 }
 
 // @ts-ignore

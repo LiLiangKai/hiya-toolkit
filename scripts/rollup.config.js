@@ -4,10 +4,10 @@ import typescript from 'rollup-plugin-typescript2'
 import json from '@rollup/plugin-json'
 import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
-// import replace from '@rollup/plugin-replace'
+import replace from '@rollup/plugin-replace'
 import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
 import babel from 'rollup-plugin-babel'
-// import { terser } from 'rollup-plugin-terser'
+import { terser } from 'rollup-plugin-terser'
 import glob from 'glob'
 
 const ROOT = join(__dirname, '..')
@@ -54,7 +54,7 @@ export default {
       exports: 'named',
       name: libName,
       banner,
-      format: 'cjs',
+      format: 'umd',
       amd: {
         id: libName
       },
@@ -72,13 +72,14 @@ export default {
     rollupDel(join(CWD, 'dist')), /** 删除dist文件 */
     nodeResolve(),
     json(),
-    // replace({
-    //   'process.env.ENV': JSON.stringify(process.env.ENV || 'pro')
-    // }),
+    replace({
+      'process.env.ENV': JSON.stringify(process.env.ENV || 'pro'),
+      'process.env.PKG_VERSION': version
+    }),
     commonjs({
       include: 'node_modules/**'
     }),
-    // terser(),
+    terser(),
     typescript({
       clean: true,
       cacheRoot: join(ROOT, `node_modules/.rpt2_cache`),
@@ -97,7 +98,9 @@ export default {
       },
       typescript: require('typescript')
     }),
-    babel(),
+    babel({
+      babelrc: join(ROOT, 'babelrc.js')
+    }),
     sizeSnapshot(),
   ],
   external: [
