@@ -73,6 +73,7 @@ export default {
     nodeResolve(),
     json(),
     replace({
+      preventAssignment: true,
       'process.env.ENV': JSON.stringify(process.env.ENV || 'pro'),
       'process.env.PKG_VERSION': version
     }),

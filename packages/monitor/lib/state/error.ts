@@ -1,40 +1,50 @@
+import { TActions } from './action'
+
 export interface IError {
+  /** ID */
+  ID?: string
+  /** 错误类型 */
+  type?: string
+  /** 事件类型 */
+  evenType?: string
+  /** 错误信息 */
   message?: string
+  /** 错误堆栈 */
   stack?: string
+  /** 页面地址 */
   url?: string
+  /** 错误时间 */
+  date?: number
+  /** 数量 */
   count?: number
+  /** 出错前行为 */
+  actions?: TActions,
+  /** 错误文件 */
+  file?: {
+    /** 行号 */
+    lineno?: number
+    /** 列号 */
+    colno?: number
+    /** 文件名|路径 */
+    name?: string
+  }
 }
 
-let errors: IError[] = []
-let record: {
-  [key: string]: IError
-} = {}
+export type TErrors = Array<IError>
 
-export function resetErrors () {
-  errors = []
-  record = {}
+let error: _Error
+
+class _Error {
+
 }
 
-export function _getErrors () {
-  return errors
+export function getError () {
+  return error
 }
 
-export function pushError (error: IError) {
-  try {
-    error = {...error}
-    error.url = error.url || window.location.href
-    const key = `${error.url}_${error.message}`
-  
-    if(record[key]) {
-      record[key].count = (record[key].count || 1) + 1
-    } else {
-      error.count = 1
-      errors.push(error)
-      record[key] = error
-    }
-  } catch (err) {}
-}
-
-export function getErrors () {
-  return JSON.parse(JSON.stringify(errors))
+export default function initError () {
+  if(!error) {
+    error = new _Error()
+  }
+  return error
 }

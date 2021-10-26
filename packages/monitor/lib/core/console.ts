@@ -1,25 +1,25 @@
-import replaceOriginal from "../utils/replaceOriginal";
-import { getEnableLog } from '../state/log'
+import { getConfig } from '../state/config'
 
-export default function replaceConsole () {
-  replaceOriginal(console, 'log', (originFn) => {
-  return (...arg) => {
-    if(!getEnableLog('log')) return
-    return originFn(`[hiya monitor log]: `, ...arg)
-  }
-})
+const logStyle = {
+  info: 'color:#fff;background:#4285f4;padding:0px 5px;',
+  warn: 'color:#fff;background:#ff943e;padding:0px 5px;',
+  error: 'color:#fff;background:#f53f3f;padding:0px 5px;',
+}
 
-replaceOriginal(console, 'error', (originFn) => {
-  return (...arg) => {
-    if(!getEnableLog('error')) return
-    return originFn(`[hiya monitor error]: `, ...arg)
-  }
-})
+function log(type, ...arg) {
+  if (!console[type]) return
+  const c = getConfig('console') || {}
+  c[type] && console[type](`%c${type}`, logStyle[type], ...arg)
+}
 
-replaceOriginal(console, 'warn', (originFn) => {
-  return (...arg) => {
-    if(!getEnableLog('warn')) return
-    return originFn(`[hiya monitor warn]: `, ...arg)
-  }
-})
+export function minfo (...arg) {
+  log('info', ...arg)
+}
+
+export function mwarn (...arg) {
+  log('warn', ...arg)
+}
+
+export function merror (...arg) {
+  log('error', ...arg)
 }

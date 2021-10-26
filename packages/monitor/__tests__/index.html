@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="fetch_btn">fetch button</button>
+  <br>
+  <button id="ReferenceError_btn">ReferenceError button</button>
+  <br>
+  <button id="TypeError_btn">TypeError button</button>
+  <br>
+  <button id="PromiseError_btn">PromiseError button</button>
+  <script src="../dist/index.cjs.js"></script>
+  <script>
+    window.initMonitor()
+
+    fetch_btn.addEventListener('click', () => {
+      fetch(`${location.origin}/api/report`)
+    })
+    ReferenceError_btn.addEventListener('click', () => {
+      console.log(a)
+    })
+    TypeError_btn.addEventListener( 'click', () => {
+      let obj
+      console.log( obj.a )
+    } )
+    PromiseError_btn.addEventListener( 'click', () => {
+      const p = Promise.reject('promise error')
+      console.log(p)
+    } )
+  </script>
+</body>
+</html>

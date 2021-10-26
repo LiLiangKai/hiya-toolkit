@@ -1,17 +1,25 @@
 'use strict';
 
-import initState from './state/init'
-import stateActions from './state'
-// import replaceConsole from './core/console'
+import { allConfig, getConfig, setConfig, initConfig } from './state/config'
+import initError from './state/error'
+import initAction from './state/action'
 import listenError from './core/listenError'
-import report from './core/report'
+import listenAction from './core/listenAction'
+import { report, autoReport } from './core/report'
 import { IMonitorOption } from './types'
+import { minfo,merror,mwarn } from './core/console'
+
+export {
+  minfo,
+  mwarn,
+  merror,
+  getConfig,
+  setConfig,
+  report
+}
 
 function getDefaultOption () {
-  const defaultOption: IMonitorOption = {
-    enableLog: '1|1|1'
-  }
-  return defaultOption
+  return allConfig()
 }
 
 /**
@@ -20,17 +28,26 @@ function getDefaultOption () {
  */
 export default function initMonitor (option?: IMonitorOption) {
   option = Object.assign({}, getDefaultOption(), option)
-  initState(option)
-  // replaceConsole()
+  initConfig(option)
+  initAction()
+  initError()
   listenError()
-  setTimeout(() => {
-    report()
-  }, 10)
+  listenAction()
+  autoReport()
+  
   const hiya_monitor = {
-    ...stateActions,
+    minfo,
+    mwarn,
+    merror,
+    allConfig,
+    getConfig,
+    setConfig,
+    report
   }
+
   // @ts-ignore
   window.hiya_monitor = hiya_monitor
+  minfo('hiya monitor init finish!')
 }
 
 // @ts-ignore

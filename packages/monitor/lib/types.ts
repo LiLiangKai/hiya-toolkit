@@ -1,7 +1,5 @@
-export interface IMonitorOption {
-  enableLog?: string | Array<string|boolean|number> | {
-    log?: boolean
-    warn?: boolean
-    error?: boolean
-  }
+import { IConfig } from './state/config'
+
+export interface IMonitorOption extends IConfig {
+  
 }
