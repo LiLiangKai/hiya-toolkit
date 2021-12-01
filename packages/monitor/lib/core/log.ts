@@ -1,4 +1,4 @@
-import { getConfig } from '../state/config'
+import { getConfig } from './config'
 
 const logStyle = {
   info: 'color:#fff;background:#4285f4;padding:0px 5px;',
@@ -6,20 +6,20 @@ const logStyle = {
   error: 'color:#fff;background:#f53f3f;padding:0px 5px;',
 }
 
-function log(type, ...arg) {
+function log(type: 'info'|'warn'|'error', ...arg) {
   if (!console[type]) return
-  const c = getConfig('console') || {}
-  c[type] && console[type](`%c${type}`, logStyle[type], ...arg)
+  const enableLog = getConfig('enableLog')
+  enableLog && console[type](`%c${type}`, logStyle[type], ...arg)
 }
 
-export function minfo (...arg) {
+export function minfo(...arg) {
   log('info', ...arg)
 }
 
-export function mwarn (...arg) {
+export function mwarn(...arg) {
   log('warn', ...arg)
 }
 
-export function merror (...arg) {
+export function merror(...arg) {
   log('error', ...arg)
 }

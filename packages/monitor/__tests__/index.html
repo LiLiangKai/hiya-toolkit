@@ -5,33 +5,94 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script>
+    const exports = {}
+  </script>
+  <script src="../dist/index.cjs.js"></script>
 </head>
 <body>
-  <button id="fetch_btn">fetch button</button>
-  <br>
-  <button id="ReferenceError_btn">ReferenceError button</button>
-  <br>
-  <button id="TypeError_btn">TypeError button</button>
-  <br>
-  <button id="PromiseError_btn">PromiseError button</button>
-  <script src="../dist/index.cjs.js"></script>
+  <div id="app">
+    <div>
+      <button id="fetch_btn">fetch button</button>
+      <br>
+      <button id="ReferenceError_btn">ReferenceError button</button>
+      <br>
+      <button id="TypeError_btn">TypeError button</button>
+      <br>
+      <button id="PromiseError_btn">PromiseError button</button>
+      <br>
+      <button id="ResourceError_btn">ResourceError button</button>
+    </div>
+    <div>
+      <ul>
+        <li><a href="#home">home</a></li>
+        <li><a href="#about">about</a></li>
+      </ul>
+    </div>
+    <div>
+      <p><button id="new_btn">新建</button></p>
+      <p><button id="edit_btn">编辑</button></p>
+    </div>
+  </div>
   <script>
-    window.initMonitor()
+      const analyser = new Analyser( {
+        url: 'http://127.0.0.1:7001/analyser',
+        enableLog: true,
+        poll: false,
+        pollInterval: 5,
+        max: 5,
+        sendOnClose: false,
+        enableXhr: {
+          success: false,
+          failure: true
+        },
+        enableResource: {
+          enable: true,
+          ignoreUrls: ['http://127.0.0.1:7007/__tests__/mo.png']
+        },
+        module: () => {
+          return 'analytics'
+        }
+      } )
 
-    fetch_btn.addEventListener('click', () => {
-      fetch(`${location.origin}/api/report`)
-    })
-    ReferenceError_btn.addEventListener('click', () => {
-      console.log(a)
-    })
-    TypeError_btn.addEventListener( 'click', () => {
-      let obj
-      console.log( obj.a )
-    } )
-    PromiseError_btn.addEventListener( 'click', () => {
-      const p = Promise.reject('promise error')
-      console.log(p)
-    } )
+      fetch_btn.addEventListener( 'click', () => {
+        fetch( `${ location.origin }/api/report` )
+        fetch( 'http://exp.landray.com.cn:9540/web/sys/artifact/elements/digest.json' )
+      } )
+      ReferenceError_btn.addEventListener( 'click', () => {
+        console.log( a )
+      } )
+      TypeError_btn.addEventListener( 'click', () => {
+        let obj
+        console.log( obj.a )
+      } )
+      PromiseError_btn.addEventListener( 'click', () => {
+        const p = Promise.reject( 'promise error' )
+        console.log( p )
+      } )
+      ResourceError_btn.addEventListener( 'click', () => {
+        const image = document.createElement( 'img' )
+        image.src = './mo.png'
+        document.body.appendChild( image )
+      } )
+
+      new_btn.addEventListener('click', () => {
+
+      })
+
+      new_btn.addEventListener('click', () => {
+        analyser.addTrack({
+          type: 'action-new',
+          event: 'click'
+        })
+      })
+
+      edit_btn.addEventListener('click', () => {
+        analyser.addTrack({
+          type: 'action-new',
+          event: 'click'
+        })
+      })
   </script>
 </body>
 </html>

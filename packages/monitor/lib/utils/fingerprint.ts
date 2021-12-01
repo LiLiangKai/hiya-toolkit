@@ -1,6 +1,5 @@
 function bin2hex(s) {
-  let i, l, o = '',
-    n;
+  let i, l, o = '', n
 
   s += ''
 
@@ -15,7 +14,7 @@ function bin2hex(s) {
  * 使用canvas生成指纹信息
  * @returns 
  */
-function generateBrowerFingerprint () {
+function generateBrowerFingerprint (text) {
   const canvas = document.createElement("canvas")
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
   ctx.font = "18px 'Arial'"
@@ -23,13 +22,13 @@ function generateBrowerFingerprint () {
   ctx.fillStyle = "#f60"
   ctx.fillRect(125, 1, 62, 20)
   ctx.fillStyle = "#069"
-  ctx.fillText('Hiya Monitor', 2, 15)
+  ctx.fillText(text, 2, 15)
   ctx.fillStyle = "rgba(102, 204, 0, 0.7)"
-  ctx.fillText('Hiya Monitor', 4, 17)
+  ctx.fillText(text, 4, 17)
 
   const b64 = canvas.toDataURL().replace("data:image/png;base64,", "")
   const bin = atob(b64)
-  return bin2hex(bin.slice(-16, -12))
+  return bin2hex(bin.slice(-18, -12))
 }
 
 let fingerprint = ''
@@ -38,7 +37,7 @@ let fingerprint = ''
  * 获取浏览器指纹
  * @returns 
  */
-export default function getBrowerFingerprint () {
-  if(!fingerprint) fingerprint = generateBrowerFingerprint()
+export default function getBrowerFingerprint (text) {
+  if(!fingerprint) fingerprint = generateBrowerFingerprint(text)
   return fingerprint
 }
