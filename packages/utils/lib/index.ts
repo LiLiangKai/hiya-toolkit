@@ -8,4 +8,5 @@ function sleep (delay = 0) {
   })
 }
 
+console.log('test')
 export default sleep
